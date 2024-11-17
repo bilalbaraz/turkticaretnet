@@ -27,4 +27,9 @@ class CartItemService
     {
         return $cartItem->update(['quantity' => $cartItem->quantity + $quantity]);
     }
+
+    public function cartItemExists(int $cartItemId): ?CartItem
+    {
+        return $this->cartItem->where(['id' => $cartItemId])->first();
+    }
 }

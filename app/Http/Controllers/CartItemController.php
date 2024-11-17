@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Cart\AddCartItemToCartRequest;
+use App\Http\Requests\Cart\DeleteCartItemRequest;
 use App\Services\CartItemService;
 use App\Services\CartService;
 use App\Services\ProductService;
@@ -40,6 +41,11 @@ class CartItemController extends Controller
         $cartItem = $this->cartItemService->hasProductInCart($notOrderedCart->id, $product->id);
 
         if ($cartItem) {
+
+            if ($cartItem->quantity + $cartData['quantity'] > $product->stock) {
+                return $this->responseService->response(false, 'You cannot add more products than stock to your cart.', 400);
+            }
+
             $this->cartItemService->addQuantityToCartItem($cartItem, $cartData['quantity']);
         } else {
             $this->cartItemService->addCartItemToCart($cartData);
@@ -53,8 +59,18 @@ class CartItemController extends Controller
         return $this->responseService->response();
     }
 
-    public function deleteCartItemFromCart()
+    public function deleteCartItemFromCart(DeleteCartItemRequest $request, int $cartItemId)
     {
-        return $this->responseService->response();
+        $data = $request->validated();
+
+        $cartItem = $this->cartItemService->cartItemExists($cartItemId);
+
+        if (!$cartItem) {
+            return $this->responseService->response(false, 'There is no cart items by given cart item ID.', 404);
+        }
+
+        $cartItem->delete();
+
+        return $this->responseService->response(true, null, 200);
     }
 }
