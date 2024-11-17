@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Services\AuthService;
+use App\Services\ResponseService;
 
 class AuthController extends Controller
 {
+    private ResponseService $responseService;
     private AuthService $authService;
 
-    public function __construct(AuthService $authService)
+    public function __construct(ResponseService $responseService, AuthService $authService)
     {
+        $this->responseService = $responseService;
         $this->authService = $authService;
     }
 
@@ -22,14 +25,19 @@ class AuthController extends Controller
         $token = auth('api')->attempt(['email' => $data['email'], 'password' => $data['password']]);
 
         if (!$token) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return $this->responseService->response(false, 'Unauthorized', 401);
         }
 
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
+        return $this->responseService->response(
+            true,
+            null,
+            200,
+            [
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => auth()->factory()->getTTL() * 60
+            ],
+        );
     }
 
     public function login(LoginRequest $request)
@@ -39,14 +47,19 @@ class AuthController extends Controller
         $token = auth('api')->attempt(['email' => $data['email'], 'password' => $data['password']]);
 
         if (!$token) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return $this->responseService->response(false, 'Unauthorized', 401);
         }
 
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
+        return $this->responseService->response(
+            true,
+            null,
+            200,
+            [
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => auth()->factory()->getTTL() * 60
+            ],
+        );
     }
 
     public function logout()
@@ -54,6 +67,6 @@ class AuthController extends Controller
         auth('api')->invalidate(true);
         auth('api')->logout();
 
-        return response()->json(['success' => true]);
+        return $this->responseService->response();
     }
 }
