@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::post('login', [AuthController::class, 'login'])->name('login');
-    Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middleware('api');
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:api');
 });
 
-Route::group(['prefix' => '', 'middleware' => ['api']], function () {
+Route::group(['prefix' => '', 'middleware' => ['auth:api']], function () {
     Route::group(['prefix' => 'products', 'as' => 'product.'], function () {
         Route::get('', [ProductController::class, 'index'])->name('index');
         Route::get('{id}', [ProductController::class, 'getProductDetailById'])->name('get_product_detail_by_id');

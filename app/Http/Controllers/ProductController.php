@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        return response()->json(['success' => true]);
+        $products = [
+            ['id' => 1, 'name' => 'Ürün'],
+        ];
+
+        return response()->json(['success' => true, 'products' => $products]);
     }
 
     public function getProductDetailById()

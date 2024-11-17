@@ -26,13 +26,9 @@ class AuthService
         return $this->user->create($data);
     }
 
-    /**
-     * @param array $credentials
-     * @return bool
-     */
-    public function signIn(array $credentials)
+    public function getUserByEmailAndPassword(array $credentials): ?User
     {
-        return Auth::attempt($credentials);
+        return $this->user->where($credentials)->first();
     }
 
     /**
