@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Collection;
 
 class ProductService
 {
@@ -13,8 +14,18 @@ class ProductService
         $this->product = $product;
     }
 
-    public function getProducts()
+    public function getProducts(): Collection
     {
         return $this->product->get();
+    }
+
+    public function getProductById(int $productId): ?Product
+    {
+        return $this->product->where(['id' => $productId])->first();
+    }
+
+    public function deleteProductById(int $productId)
+    {
+        return $this->product->where(['id' => $productId])->delete();
     }
 }

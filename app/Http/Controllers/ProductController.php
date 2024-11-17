@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\RoleEnums;
+use App\Http\Requests\Product\CreateProductRequest;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -23,14 +25,25 @@ class ProductController extends Controller
         return response()->json(['success' => true, 'products' => $products]);
     }
 
-    public function getProductDetailById()
+    public function getProductDetailById(int $productId)
     {
-        return response()->json(['success' => true]);
+        $product = $this->productService->getProductById($productId);
+
+        if (!$product) {
+            return response()->json([
+                'success' => false,
+                'message' => 'There is no products by given product ID.'
+            ], 404);
+        }
+
+        return response()->json(['success' => true, 'product' => $product]);
     }
 
-    public function createProduct()
+    public function createProduct(CreateProductRequest $request)
     {
-        return response()->json(['success' => true]);
+        $data = $request->validated();
+
+        return response()->json(['success' => true, $data]);
     }
 
     public function updateProduct()
@@ -38,8 +51,28 @@ class ProductController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function deleteProduct()
+    public function deleteProduct(int $productId)
     {
+        $user = auth('api')->user();
+
+        if ($user->role !== RoleEnums::ADMIN) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You do not have permission to delete a product.'
+            ], 401);
+        }
+
+        $product = $this->productService->getProductById($productId);
+
+        if (!$product) {
+            return response()->json([
+                'success' => false,
+                'message' => 'There is no products by given product ID.'
+            ], 404);
+        }
+
+        $this->productService->deleteProductById($productId);
+
         return response()->json(['success' => true]);
     }
 }
