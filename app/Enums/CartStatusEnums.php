@@ -6,4 +6,5 @@ enum CartStatusEnums
 {
     const CREATED = 'CREATED';
     const DELETED = 'DELETED';
+    const ORDERED = 'ORDERED';
 }

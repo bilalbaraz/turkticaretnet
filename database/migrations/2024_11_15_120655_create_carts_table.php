@@ -20,6 +20,7 @@ return new class extends Migration
                 [
                     CartStatusEnums::CREATED,
                     CartStatusEnums::DELETED,
+                    CartStatusEnums::ORDERED,
             ]);
             $table->softDeletes();
             $table->timestamps();

@@ -19,10 +19,10 @@ return new class extends Migration
             $table->enum(
                 'status',
                 [
-                    OrderStatusEnums::PENDING,
-                    OrderStatusEnums::ORDERED,
-                    OrderStatusEnums::SHIPPED,
+                    OrderStatusEnums::CREATED,
                     OrderStatusEnums::CANCELED,
+                    OrderStatusEnums::SHIPPED,
+                    OrderStatusEnums::DELIVERED,
             ]);
             $table->softDeletes();
             $table->timestamps();

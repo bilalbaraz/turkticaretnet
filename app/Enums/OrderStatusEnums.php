@@ -4,8 +4,8 @@ namespace App\Enums;
 
 enum OrderStatusEnums
 {
-    const PENDING = 'PENDING';
-    const ORDERED = 'ORDERED';
+    const CREATED = 'CREATED';
     const CANCELED = 'CANCELED';
     const SHIPPED = 'SHIPPED';
+    const DELIVERED = 'DELIVERED';
 }

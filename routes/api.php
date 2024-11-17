@@ -26,7 +26,7 @@ Route::group(['prefix' => '', 'middleware' => ['auth:api']], function () {
         Route::get('', [CartController::class, 'getCartByUserId'])->name('get_cart_by_user_id');
 
         Route::group(['prefix' => 'items', 'as' => 'item.'], function () {
-            Route::post('', [CartItemController::class, 'getCartItemsByCartId'])->name('get_cart_items_by_cart_id');
+            Route::post('', [CartItemController::class, 'addCartItemToCart'])->name('add_cart_item_to_cart');
             Route::put('{id}', [CartItemController::class, 'changeCartItemQuantity'])->name('change_cart_item_quantity');
             Route::delete('{id}', [CartItemController::class, 'deleteCartItemFromCart'])->name('delete_cart_item_from_cart');
         });
