@@ -78,6 +78,6 @@ class ProductController extends Controller
         $this->productService->deleteProductById($productId);
         $this->cartItemService->deleteCartItemsByProductId($productId);
 
-        return $this->responseService->response(true, null, 200);
+        return $this->responseService->response();
     }
 }
