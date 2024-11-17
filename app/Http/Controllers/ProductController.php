@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\RoleEnums;
 use App\Http\Requests\Product\CreateProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -56,8 +57,29 @@ class ProductController extends Controller
         return response()->json(['success' => true, 'product' => $product]);
     }
 
-    public function updateProduct()
+    public function updateProduct(UpdateProductRequest $request, int $productId)
     {
+        $data = $request->validated();
+        $user = auth('api')->user();
+
+        if ($user->role !== RoleEnums::ADMIN) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You do not have permission to delete a product.'
+            ], 401);
+        }
+
+        $product = $this->productService->getProductById($productId);
+
+        if (!$product) {
+            return response()->json([
+                'success' => false,
+                'message' => 'There is no products by given product ID.'
+            ], 404);
+        }
+
+        $this->productService->updateProduct($productId, $data);
+
         return response()->json(['success' => true]);
     }
 

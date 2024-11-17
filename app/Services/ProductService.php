@@ -29,6 +29,11 @@ class ProductService
         return $this->product->create($productData);
     }
 
+    public function updateProduct(int $productId, array $productData): bool
+    {
+        return $this->product->where(['id' => $productId])->update($productData);
+    }
+
     public function deleteProductById(int $productId)
     {
         return $this->product->where(['id' => $productId])->delete();
