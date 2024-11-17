@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\RoleEnums;
 use App\Http\Requests\Product\CreateProductRequest;
+use App\Http\Requests\Product\DeleteProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Services\ProductService;
-use Illuminate\Http\Request;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ProductController extends Controller
 {
@@ -43,14 +40,6 @@ class ProductController extends Controller
     public function createProduct(CreateProductRequest $request)
     {
         $data = $request->validated();
-        $user = auth('api')->user();
-
-        if ($user->role !== RoleEnums::ADMIN) {
-            return response()->json([
-                'success' => false,
-                'message' => 'You do not have permission to delete a product.'
-            ], 401);
-        }
 
         $product = $this->productService->createProduct($data);
 
@@ -60,14 +49,6 @@ class ProductController extends Controller
     public function updateProduct(UpdateProductRequest $request, int $productId)
     {
         $data = $request->validated();
-        $user = auth('api')->user();
-
-        if ($user->role !== RoleEnums::ADMIN) {
-            return response()->json([
-                'success' => false,
-                'message' => 'You do not have permission to delete a product.'
-            ], 401);
-        }
 
         $product = $this->productService->getProductById($productId);
 
@@ -83,17 +64,8 @@ class ProductController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function deleteProduct(int $productId)
+    public function deleteProduct(DeleteProductRequest $request, int $productId)
     {
-        $user = auth('api')->user();
-
-        if ($user->role !== RoleEnums::ADMIN) {
-            return response()->json([
-                'success' => false,
-                'message' => 'You do not have permission to delete a product.'
-            ], 401);
-        }
-
         $product = $this->productService->getProductById($productId);
 
         if (!$product) {

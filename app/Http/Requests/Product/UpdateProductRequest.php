@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Product;
 
+use App\Enums\RoleEnums;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateProductRequest extends FormRequest
@@ -11,7 +13,7 @@ class UpdateProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth('api')->user()->role === RoleEnums::ADMIN;;
     }
 
     /**
@@ -26,5 +28,10 @@ class UpdateProductRequest extends FormRequest
             'price' => 'required',
             'stock' => 'required',
         ];
+    }
+
+    protected function failedAuthorization()
+    {
+        throw new AuthorizationException('You do not have permission to update a product.');
     }
 }

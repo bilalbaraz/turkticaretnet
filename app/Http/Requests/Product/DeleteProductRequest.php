@@ -6,7 +6,7 @@ use App\Enums\RoleEnums;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateProductRequest extends FormRequest
+class DeleteProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,7 @@ class CreateProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'price' => 'required',
-            'stock' => 'required',
+            //
         ];
     }
 
