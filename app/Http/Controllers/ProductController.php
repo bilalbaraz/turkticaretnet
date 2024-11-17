@@ -42,8 +42,18 @@ class ProductController extends Controller
     public function createProduct(CreateProductRequest $request)
     {
         $data = $request->validated();
+        $user = auth('api')->user();
 
-        return response()->json(['success' => true, $data]);
+        if ($user->role !== RoleEnums::ADMIN) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You do not have permission to delete a product.'
+            ], 401);
+        }
+
+        $product = $this->productService->createProduct($data);
+
+        return response()->json(['success' => true, 'product' => $product]);
     }
 
     public function updateProduct()

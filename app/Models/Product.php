@@ -10,4 +10,8 @@ class Product extends Model
     use SoftDeletes;
 
     protected $fillable = ['name', 'price', 'stock'];
+
+    protected $casts = [
+        'price' => 'float',
+    ];
 }

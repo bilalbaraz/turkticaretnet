@@ -24,6 +24,11 @@ class ProductService
         return $this->product->where(['id' => $productId])->first();
     }
 
+    public function createProduct(array $productData): ?Product
+    {
+        return $this->product->create($productData);
+    }
+
     public function deleteProductById(int $productId)
     {
         return $this->product->where(['id' => $productId])->delete();
