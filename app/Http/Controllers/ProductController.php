@@ -6,13 +6,16 @@ use App\Http\Requests\Product\CreateProductRequest;
 use App\Http\Requests\Product\DeleteProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Services\ProductService;
+use App\Services\ResponseService;
 
 class ProductController extends Controller
 {
+    private ResponseService $responseService;
     private ProductService $productService;
 
-    public function __construct(ProductService $productService)
+    public function __construct(ResponseService $responseService, ProductService $productService)
     {
+        $this->responseService = $responseService;
         $this->productService = $productService;
     }
 
@@ -20,7 +23,7 @@ class ProductController extends Controller
     {
         $products = $this->productService->getProducts();
 
-        return response()->json(['success' => true, 'products' => $products]);
+        return $this->responseService->response(true, null, 200, ['products' => $products]);
     }
 
     public function getProductDetailById(int $productId)
@@ -28,13 +31,10 @@ class ProductController extends Controller
         $product = $this->productService->getProductById($productId);
 
         if (!$product) {
-            return response()->json([
-                'success' => false,
-                'message' => 'There is no products by given product ID.'
-            ], 404);
+            return $this->responseService->response(false, 'There is no products by given product ID.', 404);
         }
 
-        return response()->json(['success' => true, 'product' => $product]);
+        return $this->responseService->response(true, null, 200, ['product' => $product]);
     }
 
     public function createProduct(CreateProductRequest $request)
@@ -43,7 +43,7 @@ class ProductController extends Controller
 
         $product = $this->productService->createProduct($data);
 
-        return response()->json(['success' => true, 'product' => $product]);
+        return $this->responseService->response(true, null, 201, ['product' => $product]);
     }
 
     public function updateProduct(UpdateProductRequest $request, int $productId)
@@ -53,15 +53,12 @@ class ProductController extends Controller
         $product = $this->productService->getProductById($productId);
 
         if (!$product) {
-            return response()->json([
-                'success' => false,
-                'message' => 'There is no products by given product ID.'
-            ], 404);
+            return $this->responseService->response(false, 'There is no products by given product ID.', 404);
         }
 
         $this->productService->updateProduct($productId, $data);
 
-        return response()->json(['success' => true]);
+        return $this->responseService->response();
     }
 
     public function deleteProduct(DeleteProductRequest $request, int $productId)
@@ -69,14 +66,11 @@ class ProductController extends Controller
         $product = $this->productService->getProductById($productId);
 
         if (!$product) {
-            return response()->json([
-                'success' => false,
-                'message' => 'There is no products by given product ID.'
-            ], 404);
+            return $this->responseService->response(false, 'There is no products by given product ID.', 404);
         }
 
         $this->productService->deleteProductById($productId);
 
-        return response()->json(['success' => true]);
+        $this->responseService->response(true, null, 204);
     }
 }
