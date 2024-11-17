@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Product\CreateProductRequest;
 use App\Http\Requests\Product\DeleteProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
+use App\Services\CartItemService;
 use App\Services\ProductService;
 use App\Services\ResponseService;
 
@@ -12,11 +13,16 @@ class ProductController extends Controller
 {
     private ResponseService $responseService;
     private ProductService $productService;
+    private CartItemService $cartItemService;
 
-    public function __construct(ResponseService $responseService, ProductService $productService)
-    {
+    public function __construct(
+        ResponseService $responseService,
+        ProductService $productService,
+        CartItemService $cartItemService
+    ) {
         $this->responseService = $responseService;
         $this->productService = $productService;
+        $this->cartItemService = $cartItemService;
     }
 
     public function index()
@@ -70,6 +76,7 @@ class ProductController extends Controller
         }
 
         $this->productService->deleteProductById($productId);
+        $this->cartItemService->deleteCartItemsByProductId($productId);
 
         return $this->responseService->response(true, null, 200);
     }

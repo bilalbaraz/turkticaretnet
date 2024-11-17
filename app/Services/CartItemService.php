@@ -32,4 +32,9 @@ class CartItemService
     {
         return $this->cartItem->where(['id' => $cartItemId])->first();
     }
+
+    public function deleteCartItemsByProductId(int $productId): bool
+    {
+        return $this->cartItem->where(['product_id' => $productId])->delete();
+    }
 }
