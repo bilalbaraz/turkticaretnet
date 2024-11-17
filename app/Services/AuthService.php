@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService
@@ -29,16 +28,6 @@ class AuthService
     public function getUserByEmailAndPassword(array $credentials): ?User
     {
         return $this->user->where($credentials)->first();
-    }
-
-    /**
-     * @return true
-     */
-    public function signOut(): bool
-    {
-        Auth::logout();
-
-        return true;
     }
 
     public function encryptPassword(string $password): string

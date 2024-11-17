@@ -2,17 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ProductController extends Controller
 {
+    private ProductService $productService;
+
+    public function __construct(ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
+
     public function index()
     {
-        $products = [
-            ['id' => 1, 'name' => 'Ürün'],
-        ];
+        $products = $this->productService->getProducts();
 
         return response()->json(['success' => true, 'products' => $products]);
     }
