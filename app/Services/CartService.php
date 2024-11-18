@@ -23,4 +23,20 @@ class CartService
     {
         return $this->cart->where(['user_id' => $userId, 'status' => CartStatusEnums::CREATED])->first();
     }
+
+    public function getCartWithCartItemsByCartId(int $cartId): ?Cart
+    {
+        return $this->cart->with(['cartItems'])->where(['id' => $cartId])->first();
+    }
+
+    public function getTotalAmountOfCart(Cart $cart): float
+    {
+        $totalAmount = 0;
+
+        foreach ($cart->cartItems as $cartItem) {
+            $totalAmount += $cartItem->quantity * $cartItem->price;
+        }
+
+        return $totalAmount;
+    }
 }

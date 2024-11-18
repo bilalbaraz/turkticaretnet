@@ -38,4 +38,9 @@ class ProductService
     {
         return $this->product->where(['id' => $productId])->delete();
     }
+
+    public function decreaseStockByProductId(int $productId, int $quantity)
+    {
+        return $this->product->where(['id' => $productId])->decrement('stock', $quantity);
+    }
 }
