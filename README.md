@@ -38,20 +38,20 @@ Ensure you have the following installed on your system:
     php artisan key:generate
     ```
 
-4. **Generate Application Key**: Generate the JWT secret key, which is used for encryption:
+5. **Generate Application Key**: Generate the JWT secret key, which is used for encryption:
 
     ```bash
     php artisan jwt:secret
     ```
 
 
-5. **Start Docker Containers**: Use Laravel Sail to start the Docker containers:
+6. **Start Docker Containers**: Use Laravel Sail to start the Docker containers:
 
     ```bash
     ./vendor/bin/sail up -d
     ```
 
-6. **Run Database Migrations with Seeders**: Set up your database by running the migrations:
+7. **Run Database Migrations with Seeders**: Set up your database by running the migrations:
 
     ```bash
     ./vendor/bin/sail artisan migrate --seed
@@ -59,7 +59,7 @@ Ensure you have the following installed on your system:
 
 This will create the necessary tables and seed the database with demo data.
 
-7. **Access the Application**:
+8. **Access the Application**:
 Once everything is set up, you can access the application in your browser at:
 
     ```bash
@@ -80,7 +80,7 @@ Your "TurkTicaretNet - Ecommerce API" development environment should now be up a
 |-------------------------------|--------------------------------------------------------|
 | `/auth/register`               | This endpoint allows new users to register and create an account by providing their personal information and credentials.                                                    |
 | `/auth/login`               | This endpoint enables existing users to log into the system by providing their registered email and password.                                                    |
-| `/auth/logout`               | This endpoint gives authenticated users access to their profile.                                                    |
+| `/auth/logout`               | This endpoint logs out authenticated users.                 |
 
 You can check out the full list of endpoints by visiting the [endpoints](docs/endpoints.md) page.
 
