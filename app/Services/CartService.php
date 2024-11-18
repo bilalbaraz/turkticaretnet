@@ -26,7 +26,7 @@ class CartService
 
     public function getCartWithCartItemsByCartId(int $cartId): ?Cart
     {
-        return $this->cart->with(['cartItems'])->where(['id' => $cartId])->first();
+        return $this->cart->with(['cartItems.product'])->where(['id' => $cartId])->first();
     }
 
     public function getTotalAmountOfCart(Cart $cart): float

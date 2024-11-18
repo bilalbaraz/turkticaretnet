@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -42,5 +43,10 @@ class ProductService
     public function decreaseStockByProductId(int $productId, int $quantity)
     {
         return $this->product->where(['id' => $productId])->decrement('stock', $quantity);
+    }
+
+    public function hasProductStock(CartItem $cartItem): bool
+    {
+        return $cartItem->quantity > $cartItem->product->stock;
     }
 }

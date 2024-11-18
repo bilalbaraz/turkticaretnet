@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\CartStatusEnums;
 use App\Enums\OrderStatusEnums;
+use App\Events\OrderCreated;
 use App\Http\Requests\Order\CreateOrderRequest;
 use App\Services\CartService;
 use App\Services\OrderService;
@@ -39,6 +39,12 @@ class OrderController extends Controller
             return $this->responseService->response(false, 'Your cart is empty.', 400);
         }
 
+        foreach ($cart->cartItems as $cartItem) {
+            if ($this->productService->hasProductStock($cartItem)) {
+                return $this->responseService->response(false, 'Not enough stock.', 400);
+            }
+        }
+
         $totalAmount = $this->cartService->getTotalAmountOfCart($cart);
 
         $this->orderService->createOrder(
@@ -50,11 +56,7 @@ class OrderController extends Controller
             $cart->cartItems
         );
 
-        $cart->update(['status' => CartStatusEnums::ORDERED]);
-
-        foreach ($cart->cartItems as $cartItem) {
-            $this->productService->decreaseStockByProductId($cartItem->product_id, $cartItem->quantity);
-        }
+        event(new OrderCreated($cart));
 
         return $this->responseService->response(true, null, 201);
     }
@@ -67,8 +69,10 @@ class OrderController extends Controller
         return $this->responseService->response(true, null, 200, ['orders' => $orders]);
     }
 
-    public function getOrderById()
+    public function getOrderById(int $orderId)
     {
-        return $this->responseService->response();
+        $order = $this->orderService->getOrderById($orderId);
+
+        return $this->responseService->response(true, null, ['order' => $order]);
     }
 }
