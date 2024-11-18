@@ -62,8 +62,9 @@ class OrderController extends Controller
     public function getOrdersByUserId()
     {
         $user = auth('api')->user();
+        $orders = $this->orderService->getOrdersByUserId($user->id);
 
-        return $this->responseService->response();
+        return $this->responseService->response(true, null, 200, ['orders' => $orders]);
     }
 
     public function getOrderById()

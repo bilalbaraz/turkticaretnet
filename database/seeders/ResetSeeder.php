@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -22,5 +23,6 @@ class ResetSeeder extends Seeder
         Cart::query()->truncate();
         CartItem::query()->truncate();
         Order::query()->truncate();
+        OrderItem::query()->truncate();
     }
 }
