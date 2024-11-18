@@ -73,6 +73,6 @@ class OrderController extends Controller
     {
         $order = $this->orderService->getOrderById($orderId);
 
-        return $this->responseService->response(true, null, ['order' => $order]);
+        return $this->responseService->response(true, null, 200, ['order' => $order]);
     }
 }

@@ -20,7 +20,7 @@ class OrderService
         return $this->order->where(['user_id' => $userId])->orderByDesc('id')->get();
     }
 
-    public function getOrderById(int $orderId): Collection
+    public function getOrderById(int $orderId): ?Order
     {
         return $this->order->where(['id' => $orderId])->first();
     }
